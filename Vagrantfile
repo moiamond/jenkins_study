@@ -1,30 +1,18 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-=begin
-ModernIE VMs
-config.vm.box = "modernIE/vista-ie7"
-config.vm.box = "modernIE/w7-ie8"
-config.vm.box = "modernIE/w7-ie9"
-config.vm.box = "modernIE/w7-ie10"
-config.vm.box = "modernIE/w7-ie11"
-config.vm.box = "modernIE/w8-ie10"
-config.vm.box = "modernIE/w8.1-ie11"
-config.vm.box = "modernIE/w10-edge"
-System Account Credentials
-Username: IEUser
-Password: Passw0rd!
-=end
-
 Vagrant.configure("2") do |config|
-  config.vm.box = "modernIE/w7-ie11"
+  config.vm.box = "ci_win7_dev"
+  config.vm.box_url = "http://192.168.11.77:8090/ci_windows_7_virtualbox.box"
 
-  config.ssh.username = "IEUser"
-  config.ssh.password = "Passw0rd!"
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant!"
+  config.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
+  config.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
   config.vm.network "forwarded_port", guest: 22, host: 22, id: "ssh", auto_correct: true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
     vb.customize ["modifyvm", :id, "--vram", "128"]
     vb.customize ["modifyvm", :id,  "--cpus", "2"]
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
