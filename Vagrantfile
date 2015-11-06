@@ -1,15 +1,33 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$launch_slave = <<SCRIPT
+cd c:\vagrant
+start cmd /C "c:\vagrant\start_swarm-slave.bat"
+SCRIPT
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ci_win7_dev"
   config.vm.box_url = "http://192.168.11.77:8090/ci_windows_7_virtualbox.box"
 
+  config.vm.guest = :windows
+  config.vm.communicator = "winrm"
+
+  config.winrm.username = "vagrant"
+  config.winrm.password = "vagrant"
+
   config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant!"
+  config.ssh.password = "vagrant"
+
   config.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
   config.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
   config.vm.network "forwarded_port", guest: 22, host: 22, id: "ssh", auto_correct: true
+
+  # run provision
+  config.vm.provision "shell", inline: "choco install -y javaruntime"
+  config.vm.provision "shell", inline: "choco install -y visualstudio2015community"
+
+  config.vm.provision "shell", inline: $launch_slave, run: "always"
 
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "2048"]
