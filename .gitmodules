@@ -1,0 +1,6 @@
+[submodule "jenkins-ci-slave"]
+	path = jenkins-ci-slave
+	url = https://github.com/moiamond/jenkins-ci-slave
+[submodule "jenkins-ci-master"]
+	path = jenkins-ci-master
+	url = https://github.com/moiamond/jenkins-ci-master
