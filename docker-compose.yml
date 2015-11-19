@@ -1,0 +1,22 @@
+jenkins-master:
+  build: ./jenkins-ci-master
+  ports:
+    - "8080:8080"
+    - "50000:50000"
+  volumes:
+    - ./jenkins_home:/var/jenkins_home
+  environment:
+    - JAVA_OPTS=-Duser.timezone=Asia/Taipei
+  extra_hosts:
+    - "svn:192.168.0.235"
+  user: root
+  restart: always
+
+jenkins-swarm-slave:
+  build: ./jenkins-ci-slave
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /usr/bin/docker:/usr/bin/docker
+  links:
+    - jenkins-master
+  command: -master http://jenkins-master:8080 -name slave

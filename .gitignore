@@ -1,1 +1,4 @@
 .vagrant
+.git
+.DS_Store
+jenkins_home
