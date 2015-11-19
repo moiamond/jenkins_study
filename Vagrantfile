@@ -1,33 +1,26 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$launch_slave = <<SCRIPT
-cd c:\vagrant
-start cmd /C "c:\vagrant\start_swarm-slave.bat"
+$install_docker_compose = <<SCRIPT
+curl -L https://github.com/docker/compose/releases/download/1.5.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+SCRIPT
+
+$docker_compose_up = <<SCRIPT
+cd /APP
+docker-compose up -d
 SCRIPT
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ci_win7_dev"
-  config.vm.box_url = "http://192.168.11.77:8090/ci_windows_7_virtualbox.box"
+  config.vm.box = "ubuntu/trusty64"
 
-  config.vm.guest = :windows
-  config.vm.communicator = "winrm"
-
-  config.winrm.username = "vagrant"
-  config.winrm.password = "vagrant"
-
-  config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant"
-
-  config.vm.network "forwarded_port", guest: 3389, host: 3389, id: "rdp", auto_correct: true
-  config.vm.network "forwarded_port", guest: 5985, host: 5985, id: "winrm", auto_correct: true
-  config.vm.network "forwarded_port", guest: 22, host: 22, id: "ssh", auto_correct: true
+  config.vm.network "forwarded_port", guest: 8080, host: 8080, id: "jenkins", auto_correct: true
+  config.vm.synced_folder ".", "/APP", create: true
 
   # run provision
-  config.vm.provision "shell", inline: "choco install -y javaruntime"
-  config.vm.provision "shell", inline: "choco install -y visualstudio2015community"
-
-  config.vm.provision "shell", inline: $launch_slave, run: "always"
+  config.vm.provision "docker"
+  config.vm.provision "shell", inline: $install_docker_compose
+  config.vm.provision "shell", inline: $docker_compose_up
 
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--memory", "2048"]
