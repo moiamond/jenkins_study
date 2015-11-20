@@ -20,7 +20,7 @@
 
 ## Launch `Jenkins`
   
-### `Linux` user
+### `Ubuntu` user
     docker-compose up
   
 ### `Windows`/`Mac` user
