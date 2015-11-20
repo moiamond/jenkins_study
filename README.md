@@ -1,5 +1,8 @@
 # Orchestrate `Jenkins` Master/Slave with `Docker Compose`
 
+1. Build a `Jenkins` CI system powered by `Docker`. 
+2. The slave node has the capability to [run `Docker`](http://container-solutions.com/running-docker-in-jenkins-in-docker/).
+
 ## Requirement 
 
 ### `Ubuntu` user
