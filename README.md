@@ -1,4 +1,4 @@
-# Orchestrate Jenkins Master/Slave with Docker Compose
+# Orchestrate `Jenkins` Master/Slave with `Docker Compose`
 
 ## Requirement 
 
@@ -15,14 +15,13 @@
     git clone https://github.com/moiamond/jenkins_study
     git submodule update --init --recursive
 
-## Launch Jenkins
+## Launch `Jenkins`
   
-### Linux user
+### `Linux` user
     docker-compose up
   
-### Windows/Mac user
+### `Windows`/`Mac` user
     vagrant up
     
 ## Have fun
     http://localhost:8080
-    
